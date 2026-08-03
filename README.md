@@ -15,6 +15,7 @@
 nouva@kazuhaaaaan:~$ whoami
 nouva
 nouva@kazuhaaaaan:~$ cat about.txt
+
 ─────────────────────────────────────────────
   NAME      : Nouva
   ROLE      : Full-Stack Developer
