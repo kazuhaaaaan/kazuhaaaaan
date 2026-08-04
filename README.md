@@ -288,37 +288,122 @@ Status                    : In Progress
 
 <div align="center">
 
-### 🧩 NetLab — Browser-Based Network Simulator
+### 🧩 NetLab — Enterprise Browser-Based Networking Laboratory
 
-**Status:** 🚧 Active Development
+**Status:** 🚧 Active Development · 🌐 [net-lab-wheat.vercel.app](https://net-lab-wheat.vercel.app) · 📄 Apache-2.0
 
 </div>
 
-> Browser-based Network Simulator inspired by Cisco Packet Tracer, focused on MikroTik RouterOS.
+> Complete in-browser multi-vendor networking simulation platform — architected for browser execution with Clean Architecture, SOLID principles, and zero server dependencies.
 
-NetLab is being built to give network learners and engineers a lightweight, browser-native way to design, configure, and simulate network topologies — without installing heavy desktop simulators.
+NetLab (internally scoped as **MikroLab**) is not just a router emulator — it's a full modular networking simulation ecosystem, capable of simulating multi-vendor enterprise hardware entirely inside modern browsers (Chromium, Firefox, Safari).
 
-### ✨ Core Features
+### 🏭 Supported Vendor Adapters (Roadmap)
 
 <div align="center">
 
-| Feature | Description |
+![MikroTik RouterOS](https://img.shields.io/badge/MikroTik%20RouterOS-293239?style=flat-square&logo=mikrotik&logoColor=00E5FF)
+![Cisco IOS/NX-OS](https://img.shields.io/badge/Cisco%20IOS%20%2F%20NX--OS-1BA0D7?style=flat-square&logo=cisco&logoColor=white)
+![Juniper JunOS](https://img.shields.io/badge/Juniper%20JunOS-00BFFF?style=flat-square&logoColor=white)
+![Huawei VRP](https://img.shields.io/badge/Huawei%20VRP-00BFFF?style=flat-square&logoColor=white)
+![Ubiquiti EdgeOS](https://img.shields.io/badge/Ubiquiti%20EdgeOS-00BFFF?style=flat-square&logoColor=white)
+![VyOS](https://img.shields.io/badge/VyOS-00BFFF?style=flat-square&logoColor=white)
+![Fortinet FortiOS](https://img.shields.io/badge/Fortinet%20FortiOS-00BFFF?style=flat-square&logoColor=white)
+![Aruba AOS](https://img.shields.io/badge/Aruba%20AOS-00BFFF?style=flat-square&logoColor=white)
+![OpenWrt](https://img.shields.io/badge/OpenWrt-00BFFF?style=flat-square&logo=openwrt&logoColor=white)
+
+</div>
+
+### 🏛️ Application Architecture (Single-Direction Pipeline)
+
+Vendor CLI syntax is strictly decoupled from core simulation logic via Vendor Adapters, AST Parsers, and Command Executors.
+
+```
+Browser (React 19 + TypeScript 5)
+        │
+        ▼
+   React UI (@mikrolab/ui)
+        │
+        ▼
+   Canvas Engine (@mikrolab/canvas)
+        │
+        ▼
+   Sidebar & Inspector Components
+        │
+        ▼
+   Terminal / CLI Viewport (@mikrolab/terminal)
+        │
+        ▼
+   CLI Grammar Engine (@mikrolab/cli)
+        │
+        ▼
+   Vendor Adapter Layer (@mikrolab/vendors)
+        │
+        ▼
+   Command Executor & AST Transformer
+        │
+        ▼
+   Core Simulation Engine (@mikrolab/core)
+        │
+        ▼
+   Packet Processing Engine (@mikrolab/packet)
+        │
+        ▼
+   Protocol Stack Pipeline (@mikrolab/protocols)
+        │
+        ▼
+   Renderer & Topology State Synchronizer
+```
+
+### 📦 Workspace Package Layout
+
+Structured as a **PNPM Workspace** powered by **Turborepo** and TypeScript Project References.
+
+<div align="center">
+
+| Package | Name | Responsibility |
+|:---|:---|:---|
+| `packages/ui` | `@mikrolab/ui` | VS Code / Figma-inspired design system, panels, modals, gesture toolbars |
+| `packages/canvas` | `@mikrolab/canvas` | 60 FPS gesture-enabled infinite canvas, SVG cable renderer, node selection |
+| `packages/terminal` | `@mikrolab/terminal` | Multi-tab vendor terminal viewport with authentic prompt styling & history |
+| `packages/core` | `@mikrolab/core` | Vendor-agnostic topology state engine, device lifecycle, event bus |
+| `packages/cli` | `@mikrolab/cli` | Lexer, Parser, AST generator, Command Object builder |
+| `packages/packet` | `@mikrolab/packet` | Binary packet buffers, frame encapsulation/decapsulation pipeline |
+| `packages/protocols` | `@mikrolab/protocols` | Ethernet, ARP, IPv4, IPv6, ICMP, OSPF, BGP protocol logic |
+| `packages/devices` | `@mikrolab/devices` | Virtual hardware definitions (interfaces, MAC tables, memory buffers) |
+| `packages/vendors` | `@mikrolab/vendors` | Vendor CLI adapters translating syntax to Command Objects |
+| `packages/sdk` | `@mikrolab/sdk` | Plugin extension SDK for third-party vendor adapters & custom lab components |
+| `packages/shared` | `@mikrolab/shared` | Universal types, math utilities, geometric helpers, pointer gesture models |
+
+</div>
+
+### 🎮 Unified Pointer Interaction Engine
+
+A single, unified Pointer Events engine (`@mikrolab/canvas` & `@mikrolab/shared`) eliminates separate touch/mouse codepaths:
+
+<div align="center">
+
+| Gesture | Action |
 |:---|:---|
-| 🖥️ CLI | Interactive command-line simulation environment |
-| 📡 Packet Simulation | Visual packet flow across the topology |
-| 🧱 Topology Builder | Drag-and-drop network topology designer |
-| 💾 Save/Open Project | Persistent project files |
-| ⚙️ Persistent Configuration | Device configs are retained across sessions |
-| 🔷 Cisco CLI | Cisco IOS-style command emulation |
-| 🟦 MikroTik CLI | RouterOS-style command emulation |
-| 🔥 Firewall | Firewall rule simulation |
-| 🌐 Routing | Static & dynamic routing simulation |
-| 🔁 BGP | Border Gateway Protocol simulation |
-| 🔗 OSPF | Open Shortest Path First simulation |
-| 🏷️ VLAN | VLAN segmentation and trunking |
-| 📊 Queue Tree | MikroTik-style traffic shaping |
-| 📶 Wireless | Wireless device simulation |
-| 📱 Mobile Friendly | Fully responsive, usable on mobile devices |
+| 👆 Tap / Click | Select device or port |
+| 👆👆 Double Tap / Double Click | Open interactive CLI terminal |
+| ✋ Long Press / Right Click | Open contextual action menu |
+| 🤏 Pinch Zoom | Smooth canvas scale adjustment |
+| ✌️ Two Finger Pan / Middle Drag | Infinite viewport translation |
+| 🔌 Port-to-Port Tap / Drag | Instant interactive cable creation |
+| 🖱️ Hold & Drag | Multi-device selection bounding box |
+
+</div>
+
+### 💾 Storage & File Format
+
+<div align="center">
+
+| Aspect | Detail |
+|:---|:---|
+| Format | `.mlab` JSON Schema (supports compression & metadata) |
+| In-Browser Persistence | IndexedDB with LocalStorage fallback (auto-save) |
+| Export / Import | Single-click export and import of full lab topologies |
 
 </div>
 
@@ -326,12 +411,27 @@ NetLab is being built to give network learners and engineers a lightweight, brow
 
 <div align="center">
 
-![React](https://img.shields.io/badge/React-0D1117?style=for-the-badge&logo=react&logoColor=00E5FF)
-![TypeScript](https://img.shields.io/badge/TypeScript-0D1117?style=for-the-badge&logo=typescript&logoColor=00BFFF)
-![TailwindCSS](https://img.shields.io/badge/TailwindCSS-0D1117?style=for-the-badge&logo=tailwindcss&logoColor=38BDF8)
-![Node.js](https://img.shields.io/badge/Node.js-0D1117?style=for-the-badge&logo=node.js&logoColor=339933)
+![React](https://img.shields.io/badge/React%2019-0D1117?style=for-the-badge&logo=react&logoColor=00E5FF)
+![TypeScript](https://img.shields.io/badge/TypeScript%205-0D1117?style=for-the-badge&logo=typescript&logoColor=00BFFF)
+![PNPM](https://img.shields.io/badge/PNPM%20Workspace-0D1117?style=for-the-badge&logo=pnpm&logoColor=F69220)
+![Turborepo](https://img.shields.io/badge/Turborepo-0D1117?style=for-the-badge&logo=turborepo&logoColor=EF4444)
+![Vite](https://img.shields.io/badge/Vite-0D1117?style=for-the-badge&logo=vite&logoColor=646CFF)
 
 </div>
+
+### ⚙️ Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/kazuhaaaaan/NetLab.git
+cd NetLab
+
+# Install dependencies using PNPM
+pnpm install
+
+# Run dev server with Turbo
+pnpm run dev
+```
 
 <br>
 
@@ -392,47 +492,30 @@ visitor@github:~$ cat lab_environment.yaml
 
 <br>
 
-### 🧭 NetLab Roadmap
+### 📁 NetLab Repository Layout
 
 <div align="center">
 
-| Milestone | Scope | Status |
-|:---|:---|:---:|
-| v0.1 | Core CLI engine + basic topology canvas | ✔️ |
-| v0.2 | MikroTik command parser | ✔️ |
-| v0.3 | Cisco IOS command parser | 🚧 |
-| v0.4 | Packet simulation engine | 🚧 |
-| v0.5 | Save/Open project system | ⬜ |
-| v0.6 | Firewall & routing simulation | ⬜ |
-| v0.7 | OSPF/BGP dynamic routing | ⬜ |
-| v0.8 | Queue Tree & traffic shaping | ⬜ |
-| v0.9 | Wireless device simulation | ⬜ |
-| v1.0 | Public open-source release | ⬜ |
+| Path | Contents |
+|:---|:---|
+| `apps/web` | Main browser application |
+| `packages/` | Modular `@mikrolab/*` engine packages (ui, canvas, core, cli, packet, protocols, vendors, sdk, shared…) |
+| `docs/` | Project documentation |
+| `examples/` | Example labs / topologies |
+| `templates/` | Reusable lab templates |
+| `tests/unit` | Unit test suite |
+| `ARCHITECTURE.md` | Full architecture reference |
+| `ROADMAP.md` | Development roadmap |
+| `CHANGELOG.md` | Version history |
+| `CONTRIBUTING.md` | Contribution guidelines |
 
 </div>
 
-<br>
+<div align="center">
 
-### 🧱 NetLab Architecture (High Level)
+📖 See [`ARCHITECTURE.md`](https://github.com/kazuhaaaaan/NetLab/blob/main/ARCHITECTURE.md) and [`ROADMAP.md`](https://github.com/kazuhaaaaan/NetLab/blob/main/ROADMAP.md) in the repo for full technical detail.
 
-```
-┌─────────────────────────────────────────────┐
-│                  NetLab UI                   │
-│      (React + TypeScript + TailwindCSS)      │
-├─────────────────────────────────────────────┤
-│              Topology Engine                 │
-│   (Node/Link Graph · Canvas Renderer)        │
-├─────────────────────────────────────────────┤
-│             CLI Emulation Layer               │
-│   (Cisco Parser  │  MikroTik Parser)          │
-├─────────────────────────────────────────────┤
-│           Simulation Core Engine              │
-│  (Routing · Firewall · Packet Flow · VLAN)    │
-├─────────────────────────────────────────────┤
-│            Persistence Layer                  │
-│      (Project Save/Load · Local/Cloud)        │
-└─────────────────────────────────────────────┘
-```
+</div>
 
 <br>
 
