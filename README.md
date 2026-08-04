@@ -290,7 +290,7 @@ Status                    : In Progress
 
 ### 🧩 NetLab — Enterprise Browser-Based Networking Laboratory
 
-**Status:** 🚧 Active Development · 🌐 [net-lab-wheat.vercel.app](https://net-lab-wheat.vercel.app) · 📄 Apache-2.0
+**Status:** 🚧 Active Development · 🌐 [net-lab-wheat.vercel.app](https://mikrolab.kazudev.my.id) · 📄 Apache-2.0
 
 </div>
 
